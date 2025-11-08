@@ -17,3 +17,11 @@ go test <directory>
 # Example:
 go test ./1_hello_world
 ```
+
+## Docs
+
+This project uses [pkgsite](https://github.com/golang/pkgsite) for documentation generation.
+Run
+```bash
+pkgsite -open .
+```
