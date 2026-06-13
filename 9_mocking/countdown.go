@@ -4,11 +4,24 @@ import (
 	"fmt"
 	"io"
 	"iter"
+	"os"
 	"time"
 )
 
+const finalWord = "Go!"
+const countdownStart = 3
+
 type Sleeper interface {
 	Sleep()
+}
+
+type ConfigurableSleeper struct {
+	duration time.Duration
+	sleep    func(time.Duration)
+}
+
+func (c *ConfigurableSleeper) Sleep() {
+	c.sleep(c.duration)
 }
 
 func Countdown(out io.Writer, sleeper Sleeper) {
@@ -16,22 +29,7 @@ func Countdown(out io.Writer, sleeper Sleeper) {
 		fmt.Fprintln(out, i)
 		sleeper.Sleep()
 	}
-	fmt.Fprint(out, "Go!")
-}
-
-type DefaultSleeper struct{}
-
-func (d *DefaultSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
-}
-
-type ConfigurableSleeper struct {
-	Duration time.Duration
-	SleepFn  func(time.Duration)
-}
-
-func (c *ConfigurableSleeper) Sleep() {
-	c.SleepFn(c.Duration)
+	fmt.Fprint(out, finalWord)
 }
 
 func countDownFrom(from int) iter.Seq[int] {
@@ -44,8 +42,7 @@ func countDownFrom(from int) iter.Seq[int] {
 	}
 }
 
-// func main() {
-// 	// sleeper := &DefaultSleeper{}
-// 	sleeper := &ConfigurableSleeper{1 * time.Second, time.Sleep}
-// 	Countdown(os.Stdout, sleeper)
-// }
+func main() {
+	sleeper := &ConfigurableSleeper{1 * time.Second, time.Sleep}
+	Countdown(os.Stdout, sleeper)
+}

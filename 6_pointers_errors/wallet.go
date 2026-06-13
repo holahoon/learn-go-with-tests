@@ -1,4 +1,4 @@
-package pointerserrors
+package pointererrors
 
 import (
 	"errors"
@@ -7,12 +7,12 @@ import (
 
 type Bitcoin int
 
-func (b Bitcoin) String() string {
-	return fmt.Sprintf("%d BTC", b)
-}
-
 type Wallet struct {
 	balance Bitcoin
+}
+
+func (b Bitcoin) String() string {
+	return fmt.Sprintf("%d BTC", b)
 }
 
 func (w *Wallet) Deposit(amount Bitcoin) {

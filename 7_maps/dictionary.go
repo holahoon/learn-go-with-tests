@@ -1,6 +1,6 @@
-package maps
+package dictionary
 
-const (
+var (
 	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
 	ErrWordExists       = DictionaryErr("cannot add word because it already exists")
 	ErrWordDoesNotExist = DictionaryErr("cannot perform operation on word because it does not exist")
@@ -15,19 +15,19 @@ func (e DictionaryErr) Error() string {
 type Dictionary map[string]string
 
 func (d Dictionary) Search(word string) (string, error) {
-	definition, ok := d[word]
+	definitiona, ok := d[word]
 	if !ok {
 		return "", ErrNotFound
 	}
-	return definition, nil
+	return definitiona, nil
 }
 
-func (d Dictionary) Add(word, definition string) error {
-	_, err := d.Search(word)
+func (d Dictionary) Add(key, definition string) error {
+	_, err := d.Search(key)
 
 	switch err {
 	case ErrNotFound:
-		d[word] = definition
+		d[key] = definition
 	case nil:
 		return ErrWordExists
 	default:
